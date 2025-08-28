@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contact & Resource App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn.active {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .emergency-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .emergency-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .service-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .call-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .call-btn:hover {
+            background: #20b858;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: #667eea;
+        }
+        
+        .location-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .location-btn:hover {
+            background: #3367d6;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Emergency Helper</h1>
+            <p>Quick access to local emergency contacts and resources</p>
+            <div id="location-display" style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
+                📍 Location: Auto-detecting...
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('emergency')">🚑 Emergency</button>
+            <button class="nav-btn" onclick="showSection('services')">🏥 Services</button>
+            <button class="nav-btn" onclick="showSection('shelters')">🏠 Shelters</button>
+            <button class="nav-btn" onclick="showSection('helplines')">📞 Helplines</button>
+        </div>
+        
+        <div id="emergency-section" class="content-section active">
+            <h2>🚨 Emergency Contacts</h2>
+            <div class="emergency-card" onclick="makeCall('100')">
+                <h3>Police - 100</h3>
+                <p>Immediate police assistance</p>
+                <div class="contact-info">
+                    <span>Available 24/7</span>
+                    <button class="call-btn">📞 CALL NOW</button>
+                </div>
+            </div>
+            <div class="emergency-card" onclick="makeCall('101')">
+                <h3>Fire Department - 101</h3>
+                <p>Fire emergency & rescue services</p>
+                <div class="contact-info">
+                    <span>Available 24/7</span>
+                    <button class="call-btn">📞 CALL NOW</button>
+                </div>
+            </div>
+            <div class="emergency-card" onclick="makeCall('102')">
+                <h3>Ambulance - 102</h3>
+                <p>Medical emergency services</p>
+                <div class="contact-info">
+                    <span>Available 24/7</span>
+                    <button class="call-btn">📞 CALL NOW</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="services-section" class="content-section">
+            <h2>🏥 Local Services</h2>
+            <input type="text" class="search-box" placeholder="Search for hospitals, clinics..." id="serviceSearch" oninput="filterServices()">
+            <button class="location-btn" onclick="findNearby()">📍 Find Nearby Services</button>
+            
+            <div id="services-list">
+                <div class="service-card" data-name="max hospital">
+                    <h3>Max Super Speciality Hospital</h3>
+                    <p>📍 Sector 19, Noida | 2.5 km away</p>
+                    <div class="contact-info">
+                        <span>⭐ 4.5/5 | Emergency: 24/7</span>
+                        <button class="call-btn" onclick="makeCall('0120-6677000')">📞 CALL</button>
+                    </div>
+                </div>
+                <div class="service-card" data-name="fortis hospital">
+                    <h3>Fortis Hospital</h3>
+                    <p>📍 Sector 62, Noida | 3.2 km away</p>
+                    <div class="contact-info">
+                        <span>⭐ 4.3/5 | Emergency: 24/7</span>
+                        <button class="call-btn" onclick="makeCall('0120-5000000')">📞 CALL</button>
+                    </div>
+                </div>
+                <div class="service-card" data-name="metro hospital">
+                    <h3>Metro Hospital & Heart Institute</h3>
+                    <p>📍 Sector 11, Noida | 1.8 km away</p>
+                    <div class="contact-info">
+                        <span>⭐ 4.2/5 | Emergency: 24/7</span>
+                        <button class="call-btn" onclick="makeCall('0120-4777000')">📞 CALL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="shelters-section" class="content-section">
+            <h2>🏠 Relief Centers</h2>
+            <button class="location-btn" onclick="findShelters()">📍 Find Nearest Shelters</button>
+            
+            <div class="service-card">
+                <h3>Community Relief Center</h3>
+                <p>📍 Sector 15, Noida | Capacity: 500 people</p>
+                <div class="contact-info">
+                    <span>✅ Currently Open | Food Available</span>
+                    <button class="call-btn" onclick="makeCall('0120-2412345')">📞 INFO</button>
+                </div>
+            </div>
+            <div class="service-card">
+                <h3>Red Cross Shelter</h3>
+                <p>📍 Sector 27, Noida | Capacity: 300 people</p>
+                <div class="contact-info">
+                    <span>✅ Currently Open | Medical Aid Available</span>
+                    <button class="call-btn" onclick="makeCall('0120-2413456')">📞 INFO</button>
+                </div>
+            </div>
+            <div class="service-card">
+                <h3>Government Relief Camp</h3>
+                <p>📍 Sector 37, Noida | Capacity: 800 people</p>
+                <div class="contact-info">
+                    <span>✅ Currently Open | Full Facilities</span>
+                    <button class="call-btn" onclick="makeCall('0120-2414567')">📞 INFO</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="helplines-section" class="content-section">
+            <h2>📞 Support Helplines</h2>
+            <div class="service-card">
+                <h3>Women Helpline</h3>
+                <p>Support for women in distress</p>
+                <div class="contact-info">
+                    <span>Available 24/7 | Toll-free</span>
+                    <button class="call-btn" onclick="makeCall('1091')">📞 1091</button>
+                </div>
+            </div>
+            <div class="service-card">
+                <h3>Child Helpline</h3>
+                <p>Support for children in need</p>
+                <div class="contact-info">
+                    <span>Available 24/7 | Toll-free</span>
+                    <button class="call-btn" onclick="makeCall('1098')">📞 1098</button>
+                </div>
+            </div>
+            <div class="service-card">
+                <h3>Senior Citizens Helpline</h3>
+                <p>Support for elderly citizens</p>
+                <div class="contact-info">
+                    <span>Available 24/7 | Toll-free</span>
+                    <button class="call-btn" onclick="makeCall('14567')">📞 14567</button>
+                </div>
+            </div>
+            <div class="service-card">
+                <h3>Mental Health Support</h3>
+                <p>Counseling and mental health support</p>
+                <div class="contact-info">
+                    <span>Available 24/7 | Confidential</span>
+                    <button class="call-btn" onclick="makeCall('9152987821')">📞 CALL</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🏥 Emergency Helper App | Developed for Social Impact</p>
+            <p>Last updated: August 2024 | Always keep emergency numbers handy</p>
+        </div>
+    </div>
+    
+    <script>
+        // Navigation functionality
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        // Call functionality
+        function makeCall(number) {
+            if (confirm(`Do you want to call ${number}?`)) {
+                // In a real app, this would make an actual call
+                alert(`Calling ${number}... \n\nNote: This is a prototype. In a real app, this would dial the number.`);
+                // For real implementation: window.location.href = `tel:${number}`;
+            }
+        }
+        
+        // Search functionality
+        function filterServices() {
+            const searchTerm = document.getElementById('serviceSearch').value.toLowerCase();
+            const serviceCards = document.querySelectorAll('#services-list .service-card');
+            
+            serviceCards.forEach(card => {
+                const serviceName = card.getAttribute('data-name').toLowerCase();
+                const serviceText = card.textContent.toLowerCase();
+                
+                if (serviceName.includes(searchTerm) || serviceText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Location-based features
+        function findNearby() {
+            alert('📍 Locating nearby services...\n\nNote: This prototype shows sample data. A real app would use GPS to find actual nearby services.');
+        }
+        
+        function findShelters() {
+            alert('📍 Finding nearest relief centers...\n\nNote: This prototype shows sample data. A real app would show actual shelter availability and directions.');
+        }
+        
+        // Initialize location
+        function updateLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        document.getElementById('location-display').innerHTML = 
+                            `📍 Location: Noida, UP (${position.coords.latitude.toFixed(2)}, ${position.coords.longitude.toFixed(2)})`;
+                    },
+                    function(error) {
+                        document.getElementById('location-display').innerHTML = 
+                            '📍 Location: Noida, UP (Demo Location)';
+                    }
+                );
+            } else {
+                document.getElementById('location-display').innerHTML = 
+                    '📍 Location: Noida, UP (Demo Location)';
+            }
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLocation();
+            
+            // Add some interactivity
+            setInterval(function() {
+                const emergencyCards = document.querySelectorAll('.emergency-card');
+                emergencyCards.forEach(card => {
+                    card.style.boxShadow = '0 5px 15px rgba(255, 107, 107, 0.3)';
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
